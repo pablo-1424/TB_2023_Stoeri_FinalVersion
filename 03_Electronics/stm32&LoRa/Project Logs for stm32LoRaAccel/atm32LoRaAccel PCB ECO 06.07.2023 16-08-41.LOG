@@ -1,0 +1,6 @@
+Added Component: Designator=Mec1(Screw M3X5 Unconnected)
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=Mec2(Screw M3X5 Unconnected)
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Member To Class: ClassName=stm32LoRaAccel Member=Component Mec1 *
+Added Member To Class: ClassName=stm32LoRaAccel Member=Component Mec2 *

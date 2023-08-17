@@ -1,0 +1,4 @@
+Change Component Footprint: Designator=LD1 Old Footprint=LED 2012 REFLOW New Footprint=LED 1608 REFLOW
+Change Component Footprint: Designator=LD2 Old Footprint=LED 2012 REFLOW New Footprint=LED 1608 REFLOW
+Change Component Footprint: Designator=R2 Old Footprint=RESISTOR 2012 REFLOW New Footprint=RESISTOR 1608 REFLOW
+Change Component Footprint: Designator=R3 Old Footprint=RESISTOR 2012 REFLOW New Footprint=RESISTOR 1608 REFLOW

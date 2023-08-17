@@ -1,0 +1,7 @@
+DRC Rules Export File for PCB: P:\PCB\Student\TSTD\Stoeri Pablo\stm32&LoRa\atm32LoRaAccel.PcbDoc
+RuleKind=Clearance|RuleName=Clearance_1|Scope=Board|Minimum=4.92
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=5.91
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=5.91
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=0.00
+RuleKind=MinimumAnnularRing|RuleName=MinimumAnnularRing|Scope=Board|Minimum=6.89

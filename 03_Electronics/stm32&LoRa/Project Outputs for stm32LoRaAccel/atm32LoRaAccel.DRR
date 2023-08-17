@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: atm32LoRaAccel.PcbDoc   10.07.2023  11:53:14
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : atm32LoRaAccel.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.25mm (10mil)                                            Round             62        PTH        189.54mm (7.46inch)
+T2      1mm (39mil)                                               Round             17        PTH        51.43mm (2.02inch)
+T3      1.2mm (47mil)                                             Round             4         PTH        118.33mm (4.66inch)
+T4      1.5mm (59mil)                                             Round             2         PTH        4.20mm (0.17inch)
+T5      3.2mm (126mil)                                            Round             2         PTH        71.50mm (2.81inch)
+T6      2.4mm (94mil)                                             Round             2         NPTH       21.50mm (0.85inch)
+T7      3.45mm (136mil)                                           Round             4         NPTH       109.57mm (4.31inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              93
+
+Total Processing Time (hh:mm:ss) : 00:00:00

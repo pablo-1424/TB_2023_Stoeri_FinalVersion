@@ -1,0 +1,9 @@
+Change Component Footprint: Designator=G1 Old Footprint=Battery Holder Keystone 2464 New Footprint=Battery Holder Keystone 18650 TH 1131
+Change Component Comment : Designator=G1 Old Comment=3 x AAA New Comment=*
+Change component parameters: Designator = "G1" ("G1"); Footprint = "Battery Holder Keystone 2464"; UniqueID = "\TRIRSVOY" ("\TRIRSVOY")
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=G2(Battery Holder Keystone 18650 TH 1131)
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetD1_2 Pin=G2-1
+Added Pin To Net: NetName=GND Pin=G2-2
+Added Member To Class: ClassName=stm32LoRaAccel Member=Component G2 *
