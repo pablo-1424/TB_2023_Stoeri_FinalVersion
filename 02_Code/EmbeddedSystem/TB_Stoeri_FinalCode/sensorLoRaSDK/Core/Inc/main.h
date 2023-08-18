@@ -55,7 +55,9 @@ extern uint8_t stopModeActiv;
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+// Function called by the TIM6 callback
 void timFunc(uint8_t val);
+// Stop Mode Function
 void goToStop();
 /* USER CODE END EFP */
 
@@ -119,40 +121,41 @@ void goToStop();
 //Registers off the accelerometer
 #define REG_CHIPID 			0x00
 
-#define REG_ACC_X_LSB		0x04
-#define REG_ACC_X_MSB 		0x05
-#define REG_ACC_Y_LSB 		0x06
-#define REG_ACC_Y_MSB 		0x07
-#define REG_ACC_Z_LSB 		0x08
-#define REG_ACC_Z_MSB 		0x09
+#define REG_ACC_X_LSB			0x04
+#define REG_ACC_X_MSB 			0x05
+#define REG_ACC_Y_LSB 			0x06
+#define REG_ACC_Y_MSB 			0x07
+#define REG_ACC_Z_LSB 			0x08
+#define REG_ACC_Z_MSB 			0x09
 
-#define REG_FIFO_LENGTH0	0x12
-#define REG_FIFO_LENGTH1	0x13
-#define REG_FIFO_DATA		0x14
+#define REG_FIFO_LENGTH0		0x12
+#define REG_FIFO_LENGTH1		0x13
+#define REG_FIFO_DATA			0x14
 
-#define REG_ACC_CONFIG0		0x19
-#define REG_ACC_CONFIG1		0x1A
-#define REG_ACC_CONFIG2		0x1B
+#define REG_ACC_CONFIG0			0x19
+#define REG_ACC_CONFIG1			0x1A
+#define REG_ACC_CONFIG2			0x1B
 
-#define REG_INT_CONFIG0		0x1F
-#define REG_INT_CONFIG1		0x20
-#define REG_INT1_MAP		0x21
-#define REG_INT12_IO_CTRL	0x24
+#define REG_INT_CONFIG0			0x1F
+#define REG_INT_CONFIG1			0x20
+#define REG_INT1_MAP			0x21
+#define REG_INT12_IO_CTRL		0x24
 
-#define REG_FIFO_CONFIG0	0x26
+#define REG_FIFO_CONFIG0		0x26
 
-#define REG_GEN1INT_CONFIG0	0x3F
-#define REG_GEN1INT_CONFIG1	0x40
-#define REG_GEN1INT_CONFIG2	0x41
-#define REG_GEN1INT_CONFIG3	0x42
+#define REG_GEN1INT_CONFIG0		0x3F
+#define REG_GEN1INT_CONFIG1		0x40
+#define REG_GEN1INT_CONFIG2		0x41
+#define REG_GEN1INT_CONFIG3		0x42
 #define REG_GEN1INT_CONFIG31	0x43
 
-#define REG_ACTCHCONFIG0	0x55
-#define REG_ACTCHCONFIG1	0x56
+#define REG_ACTCHCONFIG0		0x55
+#define REG_ACTCHCONFIG1		0x56
 
-#define THRESHOLD			30
-#define MIDDLE_VAL			1024
-#define MIN_COUNT			14
+// Values for water detection
+#define THRESHOLD				30
+#define MIDDLE_VAL				1024
+#define MIN_COUNT				14
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

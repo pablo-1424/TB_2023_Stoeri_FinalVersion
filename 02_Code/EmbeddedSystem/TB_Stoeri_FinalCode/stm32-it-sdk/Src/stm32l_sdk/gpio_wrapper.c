@@ -392,6 +392,7 @@ void gpio_Callback(uint16_t GPIO_Pin)
 			return;
 		}
 	}
+	// Condition added (P. Stoeri)
 	if(GPIO_Pin == SENSOR_INT_Pin){
 		if(stopModeActiv == 1){
 			SystemClock_Config ();

@@ -236,10 +236,15 @@ void bma400_InitConfig(){
 				/*	Datacheck function	*/
 //======================================================================
 
+// Variable to filter the threshold
 uint16_t nbrOverSize = 0;
+// POsition in the myVal tab
 uint16_t currentMemPos = 0;
+// FiFo variable
 int16_t myVal[F_SAMP] = {0};
+// Return value
 uint8_t waterOn = 0;
+// I2C buffer
 uint8_t i2cBuff[FIFO_SIZE]={0};
 
 uint8_t dataCheck(){
@@ -249,58 +254,66 @@ uint8_t dataCheck(){
 	HAL_StatusTypeDef hStat;
 
 
-		HAL_I2C_StateTypeDef i2cSt = HAL_I2C_GetState(&hi2c1);
-		hStat = HAL_I2C_Mem_Read(&hi2c1, ACC_ADDR, REG_FIFO_LENGTH0, 1, i2cBuff, 1,HAL_MAX_DELAY);
-		if(hStat != HAL_OK){
-		  log_info("Read fifo error 1 : %d\r\n", hStat);
-		} else {
-		  fifoBytes = i2cBuff[0];
-		}
-		hStat = HAL_I2C_Mem_Read(&hi2c1, ACC_ADDR, REG_FIFO_LENGTH1, 1, i2cBuff, 1,HAL_MAX_DELAY);
-		if(hStat != HAL_OK){
-		  log_info("Read fifo error 2\r\n");
-		} else {
-		  fifoBytes = fifoBytes | i2cBuff[0]<<8;
-		}
-		hStat = HAL_I2C_Mem_Read(&hi2c1, ACC_ADDR, REG_FIFO_DATA, 1, i2cBuff, fifoBytes,HAL_MAX_DELAY);
-		if(hStat != HAL_OK){
-		  log_info("Read fifo error 3\r\n");
-		} else {
-		  for(uint8_t i = 0; i<(fifoBytes/7); i++){
-			  if(currentMemPos >= F_SAMP){
-				  currentMemPos = 0;
-				  nbrOverSize++;
-			  }
-			  for(uint8_t j = 0; j<3; j++){
-				  rawVal[j] = i2cBuff[1+i*7+j*2] | i2cBuff[2+i*7+j*2]<<4;
-				  if(i2cBuff[2+i*7+j*2]>0x80){
-					  rawVal[j] = rawVal[j] | 0xF<<12;
-				  }
-			  }
-			  myVal[currentMemPos] = sqrt(pow(rawVal[0],2) + pow(rawVal[1],2) + pow(rawVal[2],2));
-			  currentMemPos++;
-		  }
-		  uint8_t detection_count = 0;
-		  for(uint16_t i = 0; i < F_SAMP; i++){
-			  if(myVal[i] < MIDDLE_VAL + THRESHOLD && myVal[i] > MIDDLE_VAL - THRESHOLD){
-				  waterOn = 0;
-			  } else {
-				  detection_count++;
-				  if(detection_count >= MIN_COUNT){
-					  waterOn = 1;
-					  break;
-				  }
-			  }
-		  }
-		}
+	//HAL_I2C_StateTypeDef i2cSt = HAL_I2C_GetState(&hi2c1);
+	//log_info("I2C state : %d", i2cSt);
 
-		if(currentMemPos == F_SAMP){
-	//	  log_info("%d,%d,%d%d\r\n", waterOn, myVal[F_SAMP - 1], secondsOn, currentMemPos+800*nbrOverSize);
-			log_info("WaterOn : %d\r\n", waterOn);
-		} else {
-	//	  log_info("%d,%d,%d,%d\r\n", waterOn, myVal[currentMemPos], secondsOn, currentMemPos+800*nbrOverSize);
-			log_info("WaterOn : %d\r\n", waterOn);
-		}
-		return waterOn;
+	// How much data in the fifo to be read, LSB
+	hStat = HAL_I2C_Mem_Read(&hi2c1, ACC_ADDR, REG_FIFO_LENGTH0, 1, i2cBuff, 1,HAL_MAX_DELAY);
+	if(hStat != HAL_OK){
+	  log_info("Read fifo error 1 : %d\r\n", hStat);
+	} else {
+	  fifoBytes = i2cBuff[0];
+	}
+	// How much data in the fifo to be read, MSB
+	hStat = HAL_I2C_Mem_Read(&hi2c1, ACC_ADDR, REG_FIFO_LENGTH1, 1, i2cBuff, 1,HAL_MAX_DELAY);
+	if(hStat != HAL_OK){
+	  log_info("Read fifo error 2\r\n");
+	} else {
+	  fifoBytes = fifoBytes | i2cBuff[0]<<8;
+	}
+	// Read fifo
+	hStat = HAL_I2C_Mem_Read(&hi2c1, ACC_ADDR, REG_FIFO_DATA, 1, i2cBuff, fifoBytes,HAL_MAX_DELAY);
+	if(hStat != HAL_OK){
+	  log_info("Read fifo error 3\r\n");
+	} else {
+	  for(uint8_t i = 0; i<(fifoBytes/7); i++){
+		  if(currentMemPos >= F_SAMP){
+			  currentMemPos = 0;
+			  nbrOverSize++;
+		  }
+		  for(uint8_t j = 0; j<3; j++){
+			  rawVal[j] = i2cBuff[1+i*7+j*2] | i2cBuff[2+i*7+j*2]<<4;
+			  if(i2cBuff[2+i*7+j*2]>0x80){
+				  rawVal[j] = rawVal[j] | 0xF<<12;
+			  }
+		  }
+		  // Normalize
+		  myVal[currentMemPos] = sqrt(pow(rawVal[0],2) + pow(rawVal[1],2) + pow(rawVal[2],2));
+		  currentMemPos++;
+	  }
+
+	  // Detection with threshold and "filter"
+	  uint8_t detection_count = 0;
+	  for(uint16_t i = 0; i < F_SAMP; i++){
+		  if(myVal[i] < MIDDLE_VAL + THRESHOLD && myVal[i] > MIDDLE_VAL - THRESHOLD){
+			  waterOn = 0;
+		  } else {
+			  detection_count++;
+			  if(detection_count >= MIN_COUNT){
+				  waterOn = 1;
+				  break;
+			  }
+		  }
+	  }
+	}
+
+	if(currentMemPos == F_SAMP){
+//	  log_info("%d,%d,%d%d\r\n", waterOn, myVal[F_SAMP - 1], secondsOn, currentMemPos+800*nbrOverSize);
+		log_info("WaterOn : %d\r\n", waterOn);
+	} else {
+//	  log_info("%d,%d,%d,%d\r\n", waterOn, myVal[currentMemPos], secondsOn, currentMemPos+800*nbrOverSize);
+		log_info("WaterOn : %d\r\n", waterOn);
+	}
+	return waterOn;
 }
 

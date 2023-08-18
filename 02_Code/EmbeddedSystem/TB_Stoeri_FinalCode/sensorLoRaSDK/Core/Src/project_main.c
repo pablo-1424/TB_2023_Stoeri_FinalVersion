@@ -66,7 +66,6 @@ struct state {
 #define BUTTON_PIN 	__LP_GPIO_2
 
 uint8_t loRaSendVal(uint8_t *valToTransmit){
-	uint8_t i = 0;
 	uint8_t devEui[8] = {0};
 	itsdk_lorawan_getDeviceEUI(devEui);
 
@@ -84,13 +83,10 @@ uint8_t loRaSendVal(uint8_t *valToTransmit){
 		log_info("failed\r\n");
 	}
 
+	// Bytes to send LoRa : 0xFF & 0x88 is to recognise on for the part TTN to mySQL
 	uint8_t t[20] = {valToTransmit[1],valToTransmit[0],0,0xFF,0,0x88,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	if ( !itsdk_lorawan_hasjoined() ) {
 		log_info("Connecting LoRaWAN ");
-		//try that
-//		while ( !itsdk_lorawan_hasjoined() ) {
-//			itsdk_lorawan_join_sync();
-//		}
 
 		if ( itsdk_lorawan_join_sync() == LORAWAN_JOIN_SUCCESS ) {
 			log_info("success\r\n");
@@ -110,8 +106,6 @@ uint8_t loRaSendVal(uint8_t *valToTransmit){
 				rx,						// In case of recpetion - Data (uint8_t[] bcopied)
 				PAYLOAD_ENCRYPT_NONE	// End to End encryption mode
 			);
-//			itsdk_lorawan_send_t r = lorawan_driver_LORA_Send(
-//					t, 16, 1, LO, __LORAWAN_DR_5, 1, runMode, rPort, rSize, rData);
 			if ( r == LORAWAN_SEND_SENT || r == LORAWAN_SEND_ACKED ) {
 				log_info("success\r\n",r);
 				return 1;
@@ -154,14 +148,10 @@ uint8_t loRaSendVal(uint8_t *valToTransmit){
 // Setup
 
 void project_setup() {
-
-	//SX1276InitLowPower();
-
 	log_info("Hello Boss let's setup \r\n");
 	SX1276SetRfTxPower(20);
 	bma400_InitConfig();
 
-	//s_state.led = __GPIO_VAL_RESET;
 	s_state.loops = 0;
 	s_state.lastComMS = COMFREQS;
 	s_state.setup = BOOL_FALSE;

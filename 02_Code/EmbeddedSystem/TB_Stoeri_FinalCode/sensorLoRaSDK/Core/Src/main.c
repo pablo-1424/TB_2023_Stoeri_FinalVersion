@@ -56,7 +56,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
- uint8_t seconds[2] = {0};
+ uint8_t seconds[2] = {0};		// Amount of seconds of water flowing on 2 bytes
  uint8_t stopModeActiv;
 /* USER CODE END PV */
 
@@ -109,10 +109,12 @@ int main(void)
 
   itsdk_setup();
 
+  // Water flow variables
   uint8_t waterOnOld = 0;								// 0 = off, 1 = on
   uint8_t waterOnNew = 0;								// 0 = off, 1 = on
   stopModeActiv = 0;
 
+  // Due to LEDs wiring
   HAL_GPIO_WritePin(LD4_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
   HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_SET);
   /* USER CODE END 2 */
@@ -123,16 +125,22 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  // Checking if water is flowing
 	  waterOnOld = waterOnNew;
 	  waterOnNew = dataCheck();
 
+	  // Checking if the water state has changed
 	  if(waterOnNew != waterOnOld){
+		  // Water state changed
 		  if(waterOnNew == 1){
+			  // Flow's on : start time to count second
 			  HAL_TIM_Base_Start_IT(&htim6);
-		  }
-		  else{
+		  }else{
+			  // Flow's off : stop timer
 			  log_info("Seconds : %d%d\r\n", seconds[1],seconds[0]);
 			  HAL_TIM_Base_Stop_IT(&htim6);
+			  // Send LoRa if seconds amount is higher than 30s
 			  if(seconds[0] > 30 || seconds[1]>0){
 				  uint8_t loRaRet = loRaSendVal(seconds);
 				  if(loRaRet == 1){
@@ -145,6 +153,7 @@ int main(void)
 			  }
 		  }
 	  }
+	  // If water's definitely off, go to sleep
 	  if(waterOnNew == waterOnOld && waterOnNew == 0){
 		  //Control the status of the SX1276 Module
 		  log_info("state : %d\r\n",SX1276GetStatus());
@@ -152,7 +161,6 @@ int main(void)
 		  goToStop();
 	  }
   }
-
   /* USER CODE END 3 */
 }
 
@@ -214,7 +222,9 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+// Function called by the TIM6 call back
 void timFunc(uint8_t val){
+	// Counting the amount of seconds with two bytes
 	if(seconds[0] == 0xFF){
 		seconds[0] = 0;
 		seconds[1]++;
@@ -224,6 +234,7 @@ void timFunc(uint8_t val){
 	}
 }
 
+// Stop mode
 void goToStop(){
 	log_info("Go to sleep baby\r\n");
 	stopModeActiv = 1;

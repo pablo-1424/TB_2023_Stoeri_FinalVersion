@@ -188,6 +188,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if ( htim == &ITSDK_HW_TIMER1_HANDLE ) {
 		__hwTimer_loop++;
 	}
+	// Condition added (P. Stoeri)
 	if(htim == &htim6){
 		timFunc(1);
 	}
