@@ -2,7 +2,7 @@
 
 ## Information about the project
 
-The goal of the project is to implement a system wich can detect if water is flowing and calculating for how long trew a pipe. The amount of time of the water flow is then transmitted to TTN using the LoRa protocol.
+The goal of the project is to implement a system wich can detect if water is flowing and calculating for how long threw a pipe. The amount of time of the water flow is then transmitted to TTN using the LoRa protocol.
 
 A python script is able to store the received amount of time in a mySQL database from where two different graphs can be done.
 
